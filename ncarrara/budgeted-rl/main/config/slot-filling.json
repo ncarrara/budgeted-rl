@@ -1,0 +1,242 @@
+{
+  "general": {
+    "id": "mega_final",
+    "seed": 0,
+    "workspace": "tmp/mega_final",
+    "hull_options": {
+      "decimals": null,
+      "qhull_options": null,
+      "remove_duplicated_points": true,
+      "library": "pure_python"
+    },
+    "gpu": {
+      "split_batches": 20
+    },
+    "cpu": {
+      "processes": null,
+      "processes_when_linked_with_gpu": 5
+    },
+    "dictConfig": {
+      "version": 1,
+      "disable_existing_loggers": false,
+      "formatters": {
+        "standard": {
+          "format": "[%(levelname)s] %(message)s "
+        }
+      },
+      "handlers": {
+        "default": {
+          "level": "ERROR",
+          "formatter": "standard",
+          "class": "logging.StreamHandler"
+        }
+      },
+      "loggers": {
+        "": {
+          "handlers": [
+            "default"
+          ],
+          "level": "ERROR",
+          "propagate": false
+        },
+        "ncarrara.utils_rl.environments.slot_filling_env.slot_filling_env": {
+          "handlers": [
+            "default"
+          ],
+          "level": "ERROR",
+          "propagate": false
+        },
+        "ncarrara.utils_rl.environments.envs_factory": {
+          "handlers": [
+            "default"
+          ],
+          "level": "ERROR",
+          "propagate": false
+        },
+        "ncarrara.utils.os": {
+          "handlers": [
+            "default"
+          ],
+          "level": "ERROR",
+          "propagate": false
+        }
+      }
+    }
+  },
+  "feature_str": "feature_basic",
+  "generate_envs": {
+    "envs_str": "slot_filling_env_v0",
+    "envs_params": {
+      "user_params": [
+        {
+          "cerr": -0.25,
+          "cok": 0.25,
+          "ser": 0.6,
+          "cstd": 0.6,
+          "proba_hangup": 0.25
+        }
+      ],
+      "max_turn": [
+        10
+      ],
+      "size_constraints": [
+        3
+      ],
+      "penalty_if_bye": [
+        0.0
+      ],
+      "penalty_if_hangup": [
+        0.0
+      ],
+      "penalty_if_summarize_fail": [
+        0.0
+      ],
+      "penalty_by_turn": [
+        0.0
+      ],
+      "penalty_if_max_turn": [
+        0.0
+      ],
+      "reward_if_sucess": [
+        100.0
+      ],
+      "can_say_bye": [
+        false
+      ]
+    }
+  },
+  "test_ftq": {
+    "policy_path": "final_policy.pt",
+    "N_trajs": 1000
+  },
+  "test_ftq_duplicate": {
+    "N_trajs": 1000,
+    "policy_path": "policy.pt"
+  },
+  "test_bftq": {
+    "policy_path": "final_policy.pt",
+    "N_trajs": 1000,
+    "betas_test": "np.concatenate((np.linspace(0.,0.5,11),np.linspace(0.6,1.,5)))"
+  },
+  "test_bftq_duplicate": {
+    "policy_path": "policy.pt", 
+    "N_trajs": 1000,
+    "betas_test": "np.concatenate((np.linspace(0.,0.5,11),np.linspace(0.6,1.,5)))"
+  },
+  "gamma": 1.0,
+  "gamma_c": 1.0,
+  "learn_ftq_egreedy": {
+    "lambdas": "[0.,20.,40.,60.]",
+    "trajs_by_ftq_batch": 125,
+    "normalize_reward": true,
+    "N_trajs": 1250,
+    "epsilon_decay": {
+      "start": 1.0,
+      "decay": 0.025
+    },
+    "save_memory": {
+      "path": "learn_ftq_egreedy.data",
+      "as_json": true
+    }
+  },
+  "learn_ftq_duplicate": {
+    "lambdas": "[0.,15.,20.,25.,30.,35.,40.,60.]",
+    "generate_data": {
+      "lambda_": 0.0,
+      "trajs_by_ftq_batch": 500,
+      "normalize_reward": true,
+      "N_trajs": 5000,
+      "epsilon_decay": {
+        "start": 1.0,
+        "decay": 0.001
+      },
+      "save_memory": {
+        "path": "samples_for_duplicate.data",
+        "as_json": true
+      }
+    },
+    "learn_ftq_full_batch": {
+      "load_memory": {
+        "path": "samples_for_duplicate.data",
+        "as_json": true
+      },
+      "normalize_reward": true
+    }
+  },
+  "learn_bftq_egreedy": {
+    "trajs_by_ftq_batch": 500,
+    "normalize_reward": true,
+    "N_trajs": 5000,
+    "epsilon_decay": {
+      "start": 1.0,
+      "decay": 0.001
+    },
+    "betas_for_exploration": "[]",
+    "betas_for_duplication": "[]"
+  },
+  "learn_bftq_duplicate": {
+    "betas_for_duplication": "np.linspace(0.,1.,11)",
+    "load_memory": {
+        "path": "../ftq_duplicate/samples_for_duplicate.data",
+        "as_json": true
+      },
+    "normalize_reward": true
+  },
+  "bftq_params": {
+    "clamp_Qc": null,
+    "use_data_loader": false,
+    "use_data_parallel": false,
+    "use_extra_gpu_memory_threshold": 100,
+    "maximum_number_of_gpu": 1,
+    "betas_for_discretisation": "np.linspace(0.,1.,101)",
+    "nn_loss_stop_condition": 0.001,
+    "max_nn_epoch": 5000,
+    "optimizer": "ADAM",
+    "loss_function": "l2",
+    "max_ftq_epoch": 11,
+    "learning_rate": 0.001,
+    "reset_policy_each_ftq_epoch": true,
+    "delta_stop": 0.001,
+    "weight_decay": 0.0005,
+    "batch_size_experience_replay": "ALL_BATCH",
+    "loss_function_c": "l2",
+    "weights_losses": [
+      1.0,
+      1.0
+    ]
+  },
+  "bftq_net_params": {
+    "beta_encoder_type": "LINEAR",
+    "size_beta_encoder": 50,
+    "activation_type": "RELU",
+    "reset_type": "XAVIER",
+    "intra_layers": [
+      256,
+      128,
+      64
+    ]
+  },
+  "ftq_params": {
+    "nn_loss_stop_condition": 0.001,
+    "max_nn_epoch": 5000,
+    "optimizer": "ADAM",
+    "loss_function": "l2",
+    "max_ftq_epoch": 11,
+    "learning_rate": 0.001,
+    "reset_policy_each_ftq_epoch": true,
+    "delta_stop": 0.001,
+    "weight_decay": 0.0005,
+    "batch_size_experience_replay": "ALL_BATCH"
+  },
+  "ftq_net_params": {
+    "activation_type": "RELU",
+    "reset_type": "XAVIER",
+    "intra_layers": [
+      128,
+      64,
+      32
+    ]
+  }
+}
+
+
