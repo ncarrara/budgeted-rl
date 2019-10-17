@@ -326,6 +326,7 @@ def double_path(high=5, std=[0.75, 0.75]):
     # exit()
     return m, emax
 
+
 def omega(high=5, std=[0.75, 0.75]):
     A_str = ["X", "v", "->", "<-", "^"]
     A = [(0., 0.), (0., 1.), (1., 0.), (-1., 0), (0., -1.)]
@@ -356,6 +357,7 @@ def omega(high=5, std=[0.75, 0.75]):
     emax = None
     # exit()
     return m, emax
+
 
 def generate_continuous3xWidth(width=3):
     trajectory_max_size = width + 1

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import itertools
 
 import numpy as np
@@ -82,7 +84,7 @@ def epsilon_decay(start=1.0, decay=0.01, N=100, savepath=None):
         plt.title("epsilon decays")
         plt.show()
         if savepath is not None:
-            plt.savefig(savepath / "epsilon_decay")
+            plt.savefig(Path(savepath) / "epsilon_decay")
         plt.close()
     return decays
 
@@ -148,4 +150,7 @@ def zip_with_singletons(*args):
 
 
 if __name__ == "__main__":
-    epsilon_decay(1.0, 0.0005, 10000, show=True)
+    logger.setLevel(logging.DEBUG)
+    epsilon_decay(1.0, 0.001, 5000,savepath="tmp")
+    epsilon_decay(1.0, 0.005, 1000,savepath="tmp")
+    epsilon_decay(1.0, 0.0005, 10000,savepath="tmp")

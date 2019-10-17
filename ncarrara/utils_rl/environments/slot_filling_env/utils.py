@@ -32,10 +32,18 @@ def error(cerr=-1, std=0.2):
 
 def plot_ctop_cbot(cerr, cok, cstd, **kwargs):
     import matplotlib.pyplot as plt
-    succ = [sucess(cok, cstd) for _ in range(0, 1000)]
-    err = [error(cerr, cstd) for _ in range(0, 1000)]
+    succ = [sucess(cok, cstd) for _ in range(0, 100000)]
+    err = [error(cerr, cstd) for _ in range(0, 100000)]
     plt.hist(succ,500,alpha=0.50)
     plt.hist(err,500,alpha=0.50)
     plt.title("choose ctop, cbottom")
+    plt.savefig("plot_ctop_cbot")
     plt.show()
     plt.close()
+
+
+# plot_ctop_cbot(-0.25,0.25,0.1)
+# plot_ctop_cbot(-0.25,0.25,0.25)
+for i in np.linspace(0.1,0.5,9):
+    plot_ctop_cbot(-0.25,0.25,i)
+# plot_ctop_cbot(-0.25,0.25,0.75)

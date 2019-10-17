@@ -1,7 +1,7 @@
 import json
 import os
 from pathlib import Path
-from ncarrara.utils.os import makedirs
+from ncarrara.utils.os import makedirs, empty_directory
 
 
 class Configuration(object):
@@ -70,6 +70,7 @@ class Configuration(object):
 
         self.id = self.dict["general"]["id"]
         self.workspace = Path(self.dict["general"]["workspace"])
+        print(self.dict["general"])
 
         import logging.config as config
         config.dictConfig(self.dict["general"]["dictConfig"])
@@ -80,7 +81,10 @@ class Configuration(object):
             set_seed(self.seed)
 
         import numpy as np
-        np.set_printoptions(precision=2)
+        np.set_printoptions(precision=2,suppress=True)
+
+        self.writer = None
+        self.is_tensorboardX = self["general"]["is_tensorboardX"]
 
         return self
 
@@ -101,8 +105,9 @@ class Configuration(object):
         return self
 
     def load_pytorch(self, override_device_str=None):
-        self.logger.warning("we are using: import torch.multiprocessing as multiprocessing")
-        self.logger.warning("we are using: multiprocessing.set_start_method('spawn')")
+
+        self.logger.warning("Using import torch.multiprocessing as multiprocessing")
+        self.logger.warning("Using multiprocessing.set_start_method('spawn')")
         import torch.multiprocessing as multiprocessing
         try:
             multiprocessing.set_start_method('spawn')
@@ -121,12 +126,26 @@ class Configuration(object):
                 _device = get_the_device_with_most_available_memory()
             self.device = _device
             self.logger.info("DEVICE : {}".format(self.device))
+
         return self
+
+    def load_tensorboardX(self):
+        if self.is_tensorboardX:
+            from tensorboardX import SummaryWriter
+            empty_directory(self.workspace / "tensorboard")
+            makedirs(self.workspace / "tensorboard")
+            # exit()
+
+            self.writer = SummaryWriter(str(self.workspace / "tensorboard"))
+            command = "tensorboard --logdir {} --port 6009 &".format(str(self.workspace / "tensorboard"))
+            self.logger.info("running command \"{}\"".format(command))
+            os.system(command)
 
     def dump_to_workspace(self, filename="config.json"):
         """
         Dump the configuration a json file in the workspace.
         """
         makedirs(self.workspace)
+        print(self.dict)
         with open(self.workspace / filename, 'w') as f:
             json.dump(self.dict, f, indent=2)

@@ -225,7 +225,7 @@ class World():
     def draw_goal(self, goal):
         rect, reward, constraint, isabsorbing = goal
         x1, y1, x2, y2 = rect
-        self.draw_rectangle(rect, (0, 0.6, 0))
+        self.draw_rectangle(rect, (0.17, 0.63, 0.17))
         self.ctx.set_source_rgb(0, 0, 0)
         self.ctx.set_font_size(20)
         self.ctx.move_to((x1 + 0.02) * self.dw, (y1 + 0.3) * self.dh)
@@ -235,12 +235,12 @@ class World():
 
     def draw_wall(self, rect):
         x1, y1, x2, y2 = rect
-        self.draw_rectangle(rect, (0.3, 0.3, 0.3))
+        self.draw_rectangle(rect, (0.5, 0.5, 0.5))
 
     def draw_hole(self, hole):
         rect, reward, constraint, isabsorbing = hole
         x1, y1, x2, y2 = rect
-        self.draw_rectangle(rect, (0.6, 0, 0))
+        self.draw_rectangle(rect, (0.84, 0.15, 0.16))
         self.ctx.set_source_rgb(0, 0, 0)
         self.ctx.set_font_size(20)
         self.ctx.move_to((x1 + 0.02) * self.dw, (y1 + 0.3) * self.dh)
@@ -251,7 +251,7 @@ class World():
     def draw_mixte(self, hole):
         rect, reward, constraint, isabsorbing = hole
         x1, y1, x2, y2 = rect
-        self.draw_rectangle(rect, (0.3, 0.3, 0))
+        self.draw_rectangle(rect, (1.0, 0.5, 0.05))
         self.ctx.set_source_rgb(0, 0, 0)
         self.ctx.set_font_size(20)
         self.ctx.move_to((x1 + 0.02) * self.dw, (y1 + 0.3) * self.dh)
@@ -288,21 +288,21 @@ class World():
         self.draw_lattice()
 
     def draw_test_trajectory(self, trajectory, alpha):
-        self.draw_trajectory(trajectory, (0, 0, 1, alpha), 3)
+        self.draw_trajectory(trajectory, (0.12, 0.47, 0.71, alpha), 3)
 
     def draw_source_trajectory(self, trajectory, alpha=0.3):
-        self.draw_trajectory(trajectory, (0.7, 0, 0.7, alpha), 3)
+        self.draw_trajectory(trajectory, (0.58, 0.40, 0.74, alpha), 3)
 
-    def draw_source_trajectories(self, trajectories, alpha=0.3):
+    def draw_source_trajectories(self, trajectories, alpha=1.0):
         for trajectory in trajectories:
             self.draw_source_trajectory(trajectory, alpha)
 
-    def draw_test_trajectories(self, trajectories, alpha=0.3):
+    def draw_test_trajectories(self, trajectories, alpha=1.0):
         for trajectory in trajectories:
             self.draw_test_trajectory(trajectory, alpha)
 
     def save(self, filename):
-        file = filename.with_suffix('.png').as_posix()
+        file = filename+'.png'
         # logging.info("[WORLD] saving to {}".format(file))
         self.ctx.close_path()
         self.ctx.stroke()
